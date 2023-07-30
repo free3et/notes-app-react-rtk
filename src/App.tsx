@@ -1,7 +1,13 @@
-import "./App.css";
+import { NoteList } from "./components/NoteList";
 
-function App() {
-  return <>Hello world!</>;
-}
+const App = () => {
+  return (
+    <>
+      <h2 className="mb-4">Notes App</h2>
+
+      <NoteList />
+    </>
+  );
+};
 
 export default App;

@@ -1,8 +1,8 @@
-import { PayloadAction } from "../../node_modules/@reduxjs/toolkit/dist/createAction";
-import { createSlice } from "../../node_modules/@reduxjs/toolkit/dist/createSlice";
+import { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../app/store";
 
-interface Note {
+export interface Note {
   id: number;
   name: string;
   timeOfCreation: string;
@@ -117,3 +117,61 @@ export const { addNote, deleteNote } = notesSlice.actions;
 export const selectAllNotes = (state: RootState) => state.notes.notes;
 
 export default notesSlice.reducer;
+
+/* import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../app/store';
+
+interface Note {
+  id: number;
+  name: string;
+  timeOfCreation: string;
+  category: string;
+  noteContent: string;
+  datesMentioned: string[];
+  archived: boolean;
+}
+
+interface NotesState {
+  notes: Note[];
+}
+
+const initialState: NotesState = {
+  notes: [] // Add your initial notes here if needed
+};
+
+const notesSlice = createSlice({
+  name: 'notes',
+  initialState,
+  reducers: {
+    addNote: (state, action: PayloadAction<Note>) => {
+      state.notes.push(action.payload);
+    },
+    deleteNote: (state, action: PayloadAction<number>) => {
+      state.notes = state.notes.filter((note) => note.id !== action.payload);
+    },
+    editNote: (state, action: PayloadAction<Note>) => {
+      const index = state.notes.findIndex((note) => note.id === action.payload.id);
+      if (index !== -1) {
+        state.notes[index] = action.payload;
+      }
+    },
+    archiveNote: (state, action: PayloadAction<number>) => {
+      const index = state.notes.findIndex((note) => note.id === action.payload);
+      if (index !== -1) {
+        state.notes[index].archived = true;
+      }
+    },
+    unarchiveNote: (state, action: PayloadAction<number>) => {
+      const index = state.notes.findIndex((note) => note.id === action.payload);
+      if (index !== -1) {
+        state.notes[index].archived = false;
+      }
+    },
+  },
+});
+
+export const { addNote, deleteNote, editNote, archiveNote, unarchiveNote } = notesSlice.actions;
+
+export const selectAllNotes = (state: RootState) => state.notes.notes;
+
+export default notesSlice.reducer; */
