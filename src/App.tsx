@@ -1,3 +1,4 @@
+import { AddNoteForm } from "./components/AddNoteForm";
 import { NoteList } from "./components/NoteList";
 
 const App = () => {
@@ -6,6 +7,7 @@ const App = () => {
       <h2 className="mb-4">Notes App</h2>
 
       <NoteList />
+      <AddNoteForm />
     </>
   );
 };

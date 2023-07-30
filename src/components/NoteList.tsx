@@ -3,6 +3,9 @@ import { selectAllNotes, deleteNote, Note } from "../features/notesSlice";
 
 export const NoteList = () => {
   const notes = useSelector(selectAllNotes);
+
+  console.log(notes);
+
   const dispatch = useDispatch();
 
   const handleDeleteNote = (id: number) => {
@@ -21,7 +24,7 @@ export const NoteList = () => {
     <>
       <table
         id="allNotesTable"
-        className="table table-striped table-light table-hover table-borderless"
+        className="table table-striped table-dark table-hover table-borderless"
       >
         <thead>
           <tr className="table-dark">
@@ -35,24 +38,26 @@ export const NoteList = () => {
           </tr>
         </thead>
         <tbody>
-          {notes?.map((note: Note) => (
-            <tr>
-              <td></td>
-              <td className="note-title">${note.name}</td>
-              <td className="note-created">${note.timeOfCreation}</td>
-              <td className="note-category">${note.category}</td>
-              <td className="note-description">${note.noteContent}</td>
-              <td className="note-dates"></td>
-              <td className="actions">
-                <button
-                  onClick={() => handleDeleteNote(note.id)}
-                  className="deleteBtn btn btn-outline-dark btn-sm m-1"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
+          {notes?.map(
+            ({ id, name, timeOfCreation, category, noteContent }: Note) => (
+              <tr>
+                <td></td>
+                <td className="note-title">{name}</td>
+                <td className="note-created">{timeOfCreation}</td>
+                <td className="note-category">{category}</td>
+                <td className="note-description">{noteContent}</td>
+                <td className="note-dates"></td>
+                <td className="actions">
+                  <button
+                    onClick={() => handleDeleteNote(id)}
+                    className="deleteBtn btn btn-outline-dark btn-sm m-1"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            )
+          )}
         </tbody>
       </table>
     </>
