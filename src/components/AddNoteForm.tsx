@@ -18,7 +18,6 @@ export const AddNoteForm = () => {
       timeOfCreation: new Date().toISOString(),
       category: category,
       noteContent: description,
-      datesMentioned: "",
       archived: false,
     };
 
@@ -32,7 +31,7 @@ export const AddNoteForm = () => {
     <div className="container d-flex justify-content-center">
       <button
         type="button"
-        className="btn btn-info mt-3 addNewNote"
+        className="btn btn-info m-3 addNewNote"
         data-bs-toggle="modal"
         data-bs-target="#addNoteModal"
       >
