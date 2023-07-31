@@ -43,7 +43,11 @@ export const ArchiveNoteList: React.FC = () => {
         <td className="note-created">{formatDate(timeOfCreation)}</td>
         <td className="note-category">{category}</td>
         <td className="note-description">{noteContent}</td>
-        <td className="note-dates">{extractDatesFromText(noteContent)}</td>
+        <td className="note-dates">
+          {extractDatesFromText(noteContent)[0]}
+          {<br />}
+          {extractDatesFromText(noteContent)[1]}
+        </td>
         <td className="actions">
           <button
             onClick={() => handleUnarchiveNotes(id)}

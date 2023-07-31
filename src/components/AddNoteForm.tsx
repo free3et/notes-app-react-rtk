@@ -112,11 +112,7 @@ export const AddNoteForm = () => {
                   >
                     Close
                   </button>
-                  <button
-                    type="submit"
-                    className="btn btn-success"
-                    onClick={() => submitNewNote}
-                  >
+                  <button type="submit" className="btn btn-success">
                     Add Note
                   </button>
                 </div>
