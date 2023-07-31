@@ -5,6 +5,7 @@ import {
   deleteNote,
   Note,
   archiveNote,
+  editNote,
 } from "../features/notesSlice";
 import { formatDate } from "../helpers/formatDate";
 import { addImgToCategory } from "../helpers/showCategoryImg";
@@ -23,6 +24,10 @@ export const ActiveNoteList: React.FC = () => {
     "Action",
   ];
 
+  const handleEditNotes = (id: number) => {
+    dispatch(editNote(id));
+  };
+
   const handleDeleteNote = (id: number) => {
     dispatch(deleteNote(id));
   };
@@ -30,10 +35,6 @@ export const ActiveNoteList: React.FC = () => {
   const handleArchiveNotes = (id: number) => {
     dispatch(archiveNote(id));
   };
-
-  /* const handleUnarchiveNote = (id: number) => {
-    dispatch(unarchiveNote(id));
-  }; */
 
   const bodyData = activeNotes.map(
     (
@@ -52,8 +53,21 @@ export const ActiveNoteList: React.FC = () => {
         <td className="note-created">{formatDate(timeOfCreation)}</td>
         <td className="note-category">{category}</td>
         <td className="note-description">{noteContent}</td>
-        <td className="note-dates">{extractDatesFromText(noteContent)}</td>
+        <td className="note-dates">
+          {extractDatesFromText(noteContent)[0]}
+          {<br />}
+          {extractDatesFromText(noteContent)[1]}
+        </td>
         <td className="actions">
+          <button
+            onClick={() => handleEditNotes(id)}
+            type="button"
+            className="editBtn btn btn-outline-info btn-sm m-1"
+            data-bs-toggle="modal"
+            data-bs-target="#editNotePopup"
+          >
+            Edit
+          </button>
           <button
             onClick={() => handleDeleteNote(id)}
             className="deleteBtn btn btn-outline-dark btn-sm m-1"

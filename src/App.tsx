@@ -1,5 +1,7 @@
+import { ActiveNoteList } from "./components/ActiveNoteList";
 import { AddNoteForm } from "./components/AddNoteForm";
-import { ActiveNoteList } from "./components/activeNoteList";
+//import { NoteSummaryTable } from "./components/NoteSummaryTable";
+
 import { ArchiveNoteList } from "./components/ArchiveNoteList";
 
 const App = () => {
@@ -9,6 +11,7 @@ const App = () => {
 
       <ActiveNoteList />
       <AddNoteForm />
+      {/*    <NoteSummaryTable /> */}
       <ArchiveNoteList />
     </>
   );

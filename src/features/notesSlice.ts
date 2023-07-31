@@ -110,7 +110,7 @@ export const notesSlice = createSlice({
       );
     },
 
-    /* editNote: (state, action: PayloadAction<number>) => {}, */
+    editNote: (state, action: PayloadAction<number>) => {},
 
     archiveNote: (state, action: PayloadAction<number>) => {
       const archiveNote = state.activeNotes.find(
@@ -140,7 +140,7 @@ export const notesSlice = createSlice({
   },
 });
 
-export const { addNote, deleteNote, archiveNote, unarchiveNote } =
+export const { addNote, editNote, deleteNote, archiveNote, unarchiveNote } =
   notesSlice.actions;
 
 export const selectAllNotes = (state: RootState) => state.notes.activeNotes;
