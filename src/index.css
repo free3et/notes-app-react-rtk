@@ -26,14 +26,6 @@ button.btn.btn-info{
   font-weight: 700;
 }
 
-.archivedNotesWrapper {
-  display: none;
-}
-
-.archivedNotesWrapper.show {
-  display: block;
-}
-
 .table > :not(caption) > * > * {
   padding: 0.75rem;
   vertical-align: middle;
@@ -79,4 +71,13 @@ img.archive-icon {
   margin: 0 5px;
 }
 
+
+.error {
+  color: red;
+  font-size: 11px;
+}
+.success {
+  font-size: 20px;
+  color: rgb(75, 181, 67);
+}
 

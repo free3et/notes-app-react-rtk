@@ -1,30 +1,76 @@
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addNote, Note } from "../features/notesSlice";
 
-export const AddNoteForm = () => {
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("Task");
-  const [description, setDescription] = useState("");
+interface InputFields {
+  title: string;
+  description: string;
+  category: string;
+}
+
+export const AddNoteForm: React.FC = () => {
+  const [inputFields, setInputFields] = useState<InputFields>({
+    title: "",
+    description: "",
+    category: "Task",
+  });
+  const [errors, setErrors] = useState<Partial<InputFields>>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [alert, setShowAlert] = useState(false);
 
   const dispatch = useDispatch();
 
-  const submitNewNote = (e: React.FormEvent) => {
+  const validateValues = (inputValues: InputFields) => {
+    let errors: Partial<InputFields> = {};
+    if (inputValues.title.length < 5) {
+      errors.title = "Title is too short";
+    }
+    if (inputValues.description.length < 8) {
+      errors.description = "Description is too short";
+    }
+
+    return errors;
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputFields({ ...inputFields, title: e.target.value.trim() });
+  };
+
+  const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setInputFields({ ...inputFields, category: e.target.value });
+  };
+
+  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setInputFields({ ...inputFields, description: e.target.value.trim() });
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const newNote: Note = {
-      id: Date.now(),
-      name: title,
-      timeOfCreation: new Date().toISOString(),
-      category: category,
-      noteContent: description,
-      archived: false,
-    };
+    const errors = validateValues(inputFields);
+    setErrors(errors);
+    if (Object.keys(errors).length === 0) {
+      const newNote: Note = {
+        id: Date.now(),
+        name: inputFields.title,
+        timeOfCreation: new Date().toISOString(),
+        category: inputFields.category,
+        noteContent: inputFields.description,
+        archived: false,
+      };
+      dispatch(addNote(newNote));
+      setSubmitting(true);
+      setShowAlert(true);
+      setInputFields({
+        title: "",
+        description: "",
+        category: "Task",
+      });
+    }
+  };
 
-    dispatch(addNote(newNote));
-    setTitle("");
-    setDescription("");
-    setCategory("Task");
+  const handleCloseModal = () => {
+    setShowAlert(false);
   };
 
   return (
@@ -47,22 +93,29 @@ export const AddNoteForm = () => {
       >
         <div className="modal-dialog">
           <div className="modal-content">
+            {Object.keys(errors).length === 0 && submitting && alert ? (
+              <div className="alert alert-success text-center" role="alert">
+                Successfully submitted ✓
+              </div>
+            ) : null}
             <div className="modal-header">
               <h5 className="modal-title" id="addNoteModalLabel">
                 Add New Note
-              </h5>
+              </h5>{" "}
               <button
                 type="button"
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
+                onClick={handleCloseModal}
               ></button>
             </div>
             <div className="modal-body">
               <form
                 id="newNoteForm"
-                className="row g-3"
-                onSubmit={submitNewNote}
+                className="row g-3 needs-validation"
+                onSubmit={handleSubmit}
+                noValidate
               >
                 <div>
                   <label htmlFor="noteTitle" className="form-label">
@@ -72,9 +125,17 @@ export const AddNoteForm = () => {
                     type="text"
                     id="noteTitle"
                     className="form-control"
-                    onChange={(e) => setTitle(e.target.value)}
-                    required
+                    value={inputFields.title}
+                    onChange={handleTitleChange}
+                    style={{
+                      border: errors.title ? "1px solid red" : undefined,
+                    }}
                   />
+                  {errors.title ? (
+                    <p className="error">
+                      Title should be at least 5 characters long
+                    </p>
+                  ) : null}
                 </div>
                 <div>
                   <label htmlFor="category" className="form-label">
@@ -83,8 +144,8 @@ export const AddNoteForm = () => {
                   <select
                     id="category"
                     className="form-control form-select"
-                    onChange={(e) => setCategory(e.target.value)}
-                    required
+                    value={inputFields.category}
+                    onChange={handleCategoryChange}
                   >
                     <option value="Task">Task</option>
                     <option value="Random Thought">Random Thought</option>
@@ -99,9 +160,17 @@ export const AddNoteForm = () => {
                   <textarea
                     id="noteDescription"
                     className="form-control"
-                    onChange={(e) => setDescription(e.target.value)}
-                    required
+                    value={inputFields.description}
+                    onChange={handleDescriptionChange}
+                    style={{
+                      border: errors.description ? "1px solid red" : undefined,
+                    }}
                   ></textarea>
+                  {errors.description ? (
+                    <p className="error">
+                      Description should be at least 8 characters long
+                    </p>
+                  ) : null}
                 </div>
 
                 <div className="modal-footer">
@@ -109,6 +178,7 @@ export const AddNoteForm = () => {
                     type="button"
                     className="btn btn-secondary"
                     data-bs-dismiss="modal"
+                    onClick={handleCloseModal}
                   >
                     Close
                   </button>
