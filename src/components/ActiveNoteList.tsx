@@ -85,11 +85,21 @@ export const ActiveNoteList: React.FC = () => {
     )
   );
 
+  const noActiveNotes = (
+    <tr>
+      <td colSpan={Number("7")}>
+        <h5 className="text-center text-info">
+          You have no saved notes! Please add your first!
+        </h5>
+      </td>
+    </tr>
+  );
+
   return (
     <Table
       tableId="activeNotesTable"
       theadData={headersData}
-      tbodyData={bodyData}
+      tbodyData={activeNotes.length ? bodyData : noActiveNotes}
       tableColor="table-dark"
     />
   );

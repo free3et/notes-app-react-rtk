@@ -60,11 +60,19 @@ export const ArchiveNoteList: React.FC = () => {
     )
   );
 
+  const noArchiveNotes = (
+    <tr>
+      <td colSpan={Number("7")}>
+        <h5 className="text-center text-info">You have no archived notes!</h5>
+      </td>
+    </tr>
+  );
+
   return (
     <Table
       tableId="archivedNotesTable"
       theadData={headersData}
-      tbodyData={bodyData}
+      tbodyData={archiveNotes.length ? bodyData : noArchiveNotes}
       tableColor="table-primary"
     />
   );

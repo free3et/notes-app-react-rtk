@@ -3,6 +3,7 @@ interface TableProps {
   theadData: string[];
   tbodyData: any;
   tableColor: string;
+  onClickShowArchiveNotes?: () => void;
 }
 
 export const Table: React.FC<TableProps> = ({
@@ -10,7 +11,22 @@ export const Table: React.FC<TableProps> = ({
   theadData,
   tbodyData,
   tableColor,
+  onClickShowArchiveNotes,
 }) => {
+  const showArchivedTableBtn = (
+    <th onClick={onClickShowArchiveNotes} className="archiveNotes">
+      <a href="#Archived">
+        Archived
+        <img
+          src="./src/assets/lock-icon-grey.png"
+          alt="archived-notes"
+          className="archive-icon"
+        />
+        <span className="badge bg-secondary">click here</span>
+      </a>
+    </th>
+  );
+
   return (
     <>
       <table
@@ -20,23 +36,16 @@ export const Table: React.FC<TableProps> = ({
         <thead>
           <tr className="table-dark">
             <th></th>
-            {theadData?.map((item, index) => (
-              <th key={index}>{item}</th>
-            ))}
+            {theadData?.map((item, index) =>
+              item === "Archived" ? (
+                showArchivedTableBtn
+              ) : (
+                <th key={index}>{item}</th>
+              )
+            )}
           </tr>
         </thead>
-        <tbody>
-          {tbodyData}
-          {/* {tbodyData.length > 0 ? (
-            tbodyData
-          ) : (
-            <tr>
-              <td colSpan={Number("7")}>
-                <h3 className="text-center text-info">You have no notes!</h3>
-              </td>
-            </tr>
-          )} */}
-        </tbody>
+        <tbody>{tbodyData}</tbody>
       </table>
     </>
   );
