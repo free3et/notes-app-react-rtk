@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
+import { AppDispatch } from "../app/store";
 import { addNote, Note } from "../features/notesSlice";
 
 interface InputFields {
@@ -18,7 +19,7 @@ export const AddNoteForm: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [alert, setShowAlert] = useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const validateValues = (inputValues: InputFields) => {
     let errors: Partial<InputFields> = {};
@@ -58,6 +59,7 @@ export const AddNoteForm: React.FC = () => {
         noteContent: inputFields.description,
         archived: false,
       };
+
       dispatch(addNote(newNote));
       setSubmitting(true);
       setShowAlert(true);
@@ -95,7 +97,7 @@ export const AddNoteForm: React.FC = () => {
           <div className="modal-content">
             {Object.keys(errors).length === 0 && submitting && alert ? (
               <div className="alert alert-success text-center" role="alert">
-                Successfully submitted ✓
+                Successfully created ✓
               </div>
             ) : null}
             <div className="modal-header">
@@ -113,9 +115,8 @@ export const AddNoteForm: React.FC = () => {
             <div className="modal-body">
               <form
                 id="newNoteForm"
-                className="row g-3 needs-validation"
+                className="row g-3"
                 onSubmit={handleSubmit}
-                noValidate
               >
                 <div>
                   <label htmlFor="noteTitle" className="form-label">

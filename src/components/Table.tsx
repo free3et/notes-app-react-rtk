@@ -34,7 +34,7 @@ export const Table: React.FC<TableProps> = ({
         className={`table table-striped ${tableColor} table-hover table-borderless`}
       >
         <thead>
-          <tr className="table-dark">
+          <tr className="table-dark" key={Date.now()}>
             <th></th>
             {theadData?.map((item, index) =>
               item === "Archived" ? (
