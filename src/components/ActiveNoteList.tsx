@@ -1,19 +1,23 @@
-import { extractDatesFromText } from "../helpers/extractDatesFromText";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  selectAllNotes,
+  selectActiveNotes,
   deleteNote,
   Note,
   archiveNote,
-  editNote,
 } from "../features/notesSlice";
+import { extractDatesFromText } from "../helpers/extractDatesFromText";
 import { formatDate } from "../helpers/formatDate";
 import { addImgToCategory } from "../helpers/showCategoryImg";
 import { Table } from "./Table";
+import { EditNoteForm } from "./EditNoteForm";
+import { AppDispatch } from "../app/store";
 
 export const ActiveNoteList: React.FC = () => {
-  const activeNotes = useSelector(selectAllNotes);
-  const dispatch = useDispatch();
+  const activeNotes = useSelector(selectActiveNotes);
+  const dispatch: AppDispatch = useDispatch();
+
+  const [editingNote, setEditingNote] = useState<Note | null>(null);
 
   const headersData = [
     "Name",
@@ -24,8 +28,8 @@ export const ActiveNoteList: React.FC = () => {
     "Action",
   ];
 
-  const handleEditNotes = (id: number) => {
-    dispatch(editNote(id));
+  const handleEditNote = (note: Note) => {
+    setEditingNote(note);
   };
 
   const handleDeleteNote = (id: number) => {
@@ -36,54 +40,48 @@ export const ActiveNoteList: React.FC = () => {
     dispatch(archiveNote(id));
   };
 
-  const bodyData = activeNotes.map(
-    (
-      { id, name, timeOfCreation, category, noteContent }: Note,
-      index: number
-    ) => (
-      <tr>
-        <td>
-          <img
-            src={addImgToCategory(category)}
-            alt={category}
-            className="category-icon"
-          />
-        </td>
-        <td className="note-title">{name}</td>
-        <td className="note-created">{formatDate(timeOfCreation)}</td>
-        <td className="note-category">{category}</td>
-        <td className="note-description">{noteContent}</td>
-        <td className="note-dates">
-          {extractDatesFromText(noteContent)[0]}
-          {<br />}
-          {extractDatesFromText(noteContent)[1]}
-        </td>
-        <td className="actions">
-          <button
-            onClick={() => handleEditNotes(id)}
-            type="button"
-            className="editBtn btn btn-outline-info btn-sm m-1"
-            data-bs-toggle="modal"
-            data-bs-target="#editNotePopup"
-          >
-            Edit
-          </button>
-          <button
-            onClick={() => handleDeleteNote(id)}
-            className="deleteBtn btn btn-outline-dark btn-sm m-1"
-          >
-            Delete
-          </button>
-          <button
-            onClick={() => handleArchiveNotes(id)}
-            className="archiveBtn btn btn-outline-primary btn-sm m-1"
-          >
-            Archive
-          </button>
-        </td>
-      </tr>
-    )
-  );
+  const bodyData = activeNotes.map((note: Note, index: number) => (
+    <tr key={index}>
+      <td>
+        <img
+          src={addImgToCategory(note.category)}
+          alt={note.category}
+          className="category-icon"
+        />
+      </td>
+      <td className="note-title">{note.name}</td>
+      <td className="note-created">{formatDate(note.timeOfCreation)}</td>
+      <td className="note-category">{note.category}</td>
+      <td className="note-description">{note.noteContent}</td>
+      <td className="note-dates">
+        {extractDatesFromText(note.noteContent)[0]}
+        {<br />}
+        {extractDatesFromText(note.noteContent)[1]}
+      </td>
+      <td className="actions">
+        <button
+          onClick={() => handleEditNote(note)}
+          type="button"
+          className="editBtn btn btn-outline-success btn-sm m-1"
+          data-bs-target="#editNoteModal"
+        >
+          Edit
+        </button>
+        <button
+          onClick={() => handleDeleteNote(note.id)}
+          className="deleteBtn btn btn-outline-dark btn-sm m-1"
+        >
+          Delete
+        </button>
+        <button
+          onClick={() => handleArchiveNotes(note.id)}
+          className="archiveBtn btn btn-outline-primary btn-sm m-1"
+        >
+          Archive
+        </button>
+      </td>
+    </tr>
+  ));
 
   const noActiveNotes = (
     <tr>
@@ -96,11 +94,19 @@ export const ActiveNoteList: React.FC = () => {
   );
 
   return (
-    <Table
-      tableId="activeNotesTable"
-      theadData={headersData}
-      tbodyData={activeNotes.length ? bodyData : noActiveNotes}
-      tableColor="table-dark"
-    />
+    <>
+      <Table
+        tableId="activeNotesTable"
+        theadData={headersData}
+        tbodyData={activeNotes.length ? bodyData : noActiveNotes}
+        tableColor="table-light"
+      />
+      {editingNote && (
+        <EditNoteForm
+          editingNote={editingNote}
+          onClose={() => setEditingNote(null)}
+        />
+      )}
+    </>
   );
 };

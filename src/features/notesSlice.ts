@@ -1,5 +1,4 @@
-import { PayloadAction } from "@reduxjs/toolkit";
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../app/store";
 
 enum NoteCategory {
@@ -110,7 +109,16 @@ export const notesSlice = createSlice({
       );
     },
 
-    editNote: (state, action: PayloadAction<number>) => {},
+    editNote: (state, action: PayloadAction<Note>) => {
+      const editedNote = action.payload;
+
+      const index = state.activeNotes.findIndex(
+        (note) => note.id === editedNote.id
+      );
+      if (index !== -1) {
+        state.activeNotes[index] = editedNote;
+      }
+    },
 
     archiveNote: (state, action: PayloadAction<number>) => {
       const archiveNote = state.activeNotes.find(
@@ -143,7 +151,7 @@ export const notesSlice = createSlice({
 export const { addNote, editNote, deleteNote, archiveNote, unarchiveNote } =
   notesSlice.actions;
 
-export const selectAllNotes = (state: RootState) => state.notes.activeNotes;
+export const selectActiveNotes = (state: RootState) => state.notes.activeNotes;
 export const selectArchiveNotes = (state: RootState) =>
   state.notes.archiveNotes;
 

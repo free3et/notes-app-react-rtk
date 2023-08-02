@@ -1,17 +1,18 @@
-import { extractDatesFromText } from "../helpers/extractDatesFromText";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectArchiveNotes,
   Note,
   unarchiveNote,
 } from "../features/notesSlice";
+import { AppDispatch } from "../app/store";
+import { extractDatesFromText } from "../helpers/extractDatesFromText";
 import { formatDate } from "../helpers/formatDate";
 import { addImgToCategory } from "../helpers/showCategoryImg";
 import { Table } from "./Table";
 
 export const ArchiveNoteList: React.FC = () => {
   const archiveNotes = useSelector(selectArchiveNotes);
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const headersData = [
     "Name",
@@ -31,7 +32,7 @@ export const ArchiveNoteList: React.FC = () => {
       { id, name, timeOfCreation, category, noteContent }: Note,
       index: number
     ) => (
-      <tr>
+      <tr key={index}>
         <td>
           <img
             src={addImgToCategory(category)}
@@ -63,7 +64,9 @@ export const ArchiveNoteList: React.FC = () => {
   const noArchiveNotes = (
     <tr>
       <td colSpan={Number("7")}>
-        <h5 className="text-center text-info">You have no archived notes!</h5>
+        <h5 className="text-center text-primary">
+          You have no archived notes!
+        </h5>
       </td>
     </tr>
   );
