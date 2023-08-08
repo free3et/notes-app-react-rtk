@@ -98,7 +98,7 @@ export const ActiveNoteList: React.FC = () => {
       <Table
         tableId="activeNotesTable"
         theadData={headersData}
-        tbodyData={activeNotes.length ? bodyData : noActiveNotes}
+        tbodyData={activeNotes.length ? bodyData : [noActiveNotes]}
         tableColor="table-light"
       />
       {editingNote && (

@@ -75,7 +75,7 @@ export const ArchiveNoteList: React.FC = () => {
     <Table
       tableId="archivedNotesTable"
       theadData={headersData}
-      tbodyData={archiveNotes.length ? bodyData : noArchiveNotes}
+      tbodyData={archiveNotes.length ? bodyData : [noArchiveNotes]}
       tableColor="table-primary"
     />
   );
