@@ -3,7 +3,7 @@ import brainImg from "../assets/brain-icon.png";
 import lampImg from "../assets/lamp-icon.png";
 import quoteImg from "../assets/quote-icon.png";
 
-export function addImgToCategory(category) {
+export function addImgToCategory(category: string): string {
   let imageSrc = "";
 
   switch (category) {

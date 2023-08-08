@@ -73,11 +73,12 @@ img.archive-icon {
 
 
 .error {
-  color: red;
-  font-size: 11px;
+  color: #ff0000;
+  font-size: .8rem;
+  padding: 10px 0;
 }
 .success {
-  font-size: 20px;
-  color: rgb(75, 181, 67);
+  font-size: 1.2rem;
+  color: #4bb543;
 }
 
