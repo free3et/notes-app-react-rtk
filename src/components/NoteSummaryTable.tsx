@@ -16,7 +16,7 @@ export const NoteSummaryTable: React.FC = () => {
   const getNoteCountsByCategory = (notes: Note[], category: string) =>
     notes.filter((note) => note.category === category).length;
 
-  const headersData = ["Note Category", "Active", "Archived"];
+  const headersData = ["Note Category", "Active notes", "Archived"];
   const [showArchivedTable, setShowArchivedTable] = useState(false);
 
   const handleShowArchivedTable = () => {
@@ -25,17 +25,22 @@ export const NoteSummaryTable: React.FC = () => {
 
   const bodyData = ["Task", "Random Thought", "Idea", "Quote"].map(
     (category) => (
-      <tr key={category}>
-        <td>
+      <tr
+        key={category}
+        className="border border-slate-100 bg-slate-200 hover:bg-zinc-300"
+      >
+        <td className="xs:hidden p-3">
           <img
             src={addImgToCategory(category)}
             alt="category-icon"
             className="category-icon"
           />
         </td>
-        <td>{category}</td>
-        <td>{getNoteCountsByCategory(allNotes, category)}</td>
-        <td>{getNoteCountsByCategory(archivedNotes, category)}</td>
+        <td className="p-3">{category}</td>
+        <td className="p-3">{getNoteCountsByCategory(allNotes, category)}</td>
+        <td className="p-3">
+          {getNoteCountsByCategory(archivedNotes, category)}
+        </td>
       </tr>
     )
   );
@@ -46,7 +51,6 @@ export const NoteSummaryTable: React.FC = () => {
         tableId="summaryTable"
         theadData={headersData}
         tbodyData={bodyData}
-        tableColor="table-secondary"
         onClickShowArchiveNotes={handleShowArchivedTable}
       />
       {showArchivedTable && <ArchiveNoteList />}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectActiveNotes,
@@ -12,12 +12,14 @@ import { addImgToCategory } from "../helpers/showCategoryImg";
 import { Table } from "./Table";
 import { EditNoteForm } from "./EditNoteForm";
 import { AppDispatch } from "../app/store";
+import ActionButtons from "./ActionButtons";
 
 export const ActiveNoteList: React.FC = () => {
   const activeNotes = useSelector(selectActiveNotes);
   const dispatch: AppDispatch = useDispatch();
 
   const [editingNote, setEditingNote] = useState<Note | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const headersData = [
     "Name",
@@ -30,6 +32,7 @@ export const ActiveNoteList: React.FC = () => {
 
   const handleEditNote = (note: Note) => {
     setEditingNote(note);
+    setIsModalOpen(true);
   };
 
   const handleDeleteNote = (id: number) => {
@@ -41,56 +44,50 @@ export const ActiveNoteList: React.FC = () => {
   };
 
   const bodyData = activeNotes.map((note: Note, index: number) => (
-    <tr key={index}>
-      <td>
+    <tr
+      key={index}
+      className="border border-slate-100 bg-slate-200 hover:bg-zinc-300"
+    >
+      <td className="xs:hidden md:p-1 lg:p-2">
         <img
           src={addImgToCategory(note.category)}
           alt={note.category}
           className="category-icon"
         />
       </td>
-      <td className="note-title">{note.name}</td>
-      <td className="note-created">{formatDate(note.timeOfCreation)}</td>
-      <td className="note-category">{note.category}</td>
-      <td className="note-description">{note.noteContent}</td>
-      <td className="note-dates">
-        {extractDatesFromText(note.noteContent)[0]}
-        {<br />}
-        {extractDatesFromText(note.noteContent)[1]}
+      <td className="note-title sm:p-1 md:p-2 lg:p-2 xl:p-3 2xl:p-4">
+        {note.name}
       </td>
-      <td className="actions">
-        <button
-          onClick={() => handleEditNote(note)}
-          type="button"
-          className="editBtn btn btn-outline-success btn-sm m-1"
-          data-bs-target="#editNoteModal"
-        >
-          Edit
-        </button>
-        <button
-          onClick={() => handleDeleteNote(note.id)}
-          className="deleteBtn btn btn-outline-dark btn-sm m-1"
-        >
-          Delete
-        </button>
-        <button
-          onClick={() => handleArchiveNotes(note.id)}
-          className="archiveBtn btn btn-outline-primary btn-sm m-1"
-        >
-          Archive
-        </button>
+      <td className="note-created sm:p-1 md:p-2 lg:p-2 xl:p-3 2xl:p-4">
+        {formatDate(note.timeOfCreation)}
       </td>
+      <td className="note-category sm:p-1 md:p-2 lg:p-2 xl:p-3 2xl:p-4">
+        {note.category}
+      </td>
+      <td className="note-description sm:p-1 md:p-2 lg:p-4">
+        {note.noteContent}
+      </td>
+      <td className="note-dates sm:p-1 md:p-2 lg:p-2 xl:p-3 2xl:p-4">
+        {extractDatesFromText(note.noteContent).map((date, idx) => (
+          <Fragment key={idx}>
+            {date}
+            {idx < 1 && <span className="date-separator" />}
+          </Fragment>
+        ))}
+      </td>
+      <ActionButtons
+        note={note}
+        onEdit={handleEditNote}
+        onDelete={handleDeleteNote}
+        onArchive={handleArchiveNotes}
+      />
     </tr>
   ));
 
   const noActiveNotes = (
-    <tr>
-      <td colSpan={Number("7")}>
-        <h5 className="text-center text-info">
-          You have no saved notes! Please add your first!
-        </h5>
-      </td>
-    </tr>
+    <div className="text-center text-info">
+      You have no saved notes! Please add your first!
+    </div>
   );
 
   return (
@@ -99,12 +96,15 @@ export const ActiveNoteList: React.FC = () => {
         tableId="activeNotesTable"
         theadData={headersData}
         tbodyData={activeNotes.length ? bodyData : [noActiveNotes]}
-        tableColor="table-light"
       />
       {editingNote && (
         <EditNoteForm
           editingNote={editingNote}
-          onClose={() => setEditingNote(null)}
+          onClose={() => {
+            setEditingNote(null);
+            setIsModalOpen(false);
+          }}
+          isOpen={isModalOpen}
         />
       )}
     </>
